@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Império Mongol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0e0c09;
+      --paper: #f5efe3;
+      --gold: #c8952a;
+      --gold-light: #e6b84a;
+      --red: #8b2020;
+      --text: #e8dcc8;
+      --muted: #9a8f7e;
+      --line: rgba(200, 149, 42, 0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 1px; height: 80px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    .hero-ornament {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.45em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.2s;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.8rem, 8vw, 7rem);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      color: var(--paper);
+      opacity: 0;
+      animation: fadeUp 1.1s ease forwards 0.5s;
+    }
+
+    .hero-title em {
+      display: block;
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.45em;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--gold-light);
+      margin-top: 0.6rem;
+    }
+
+    .hero-dates {
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      font-style: italic;
+      opacity: 0;
+      animation: fadeUp 1.1s ease forwards 0.8s;
+    }
+
+    .hero-divider {
+      margin-top: 3rem;
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── SECTION ── */
+    section {
+      padding: 8rem 0;
+      border-bottom: 1px solid var(--line);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+      max-width: 80px;
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 400;
+      color: var(--paper);
+      line-height: 1.25;
+      margin-bottom: 2rem;
+    }
+
+    h2 em {
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--gold-light);
+      font-weight: 300;
+    }
+
+    p {
+      color: var(--text);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    /* ── QUOTE ── */
+    blockquote {
+      border-left: 2px solid var(--gold);
+      padding: 1rem 0 1rem 2rem;
+      margin: 3rem 0;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      font-weight: 300;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 0.8rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 90px 1px 1fr;
+      gap: 0 2rem;
+      padding-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-year {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      padding-top: 0.15rem;
+      text-align: right;
+    }
+
+    .tl-line {
+      position: relative;
+    }
+
+    .tl-line::before {
+      content: '';
+      position: absolute;
+      top: 6px; left: 50%; transform: translateX(-50%);
+      width: 7px; height: 7px;
+      border: 1px solid var(--gold);
+      background: var(--bg);
+      border-radius: 50%;
+    }
+
+    .tl-line::after {
+      content: '';
+      position: absolute;
+      top: 20px; left: 50%; transform: translateX(-50%);
+      width: 1px;
+      height: calc(100% - 20px);
+      background: var(--line);
+    }
+
+    .tl-item:last-child .tl-line::after { display: none; }
+
+    .tl-content strong {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--paper);
+      font-weight: 400;
+      margin-bottom: 0.4rem;
+    }
+
+    .tl-content p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    /* ── STAT GRID ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin: 3rem 0;
+    }
+
+    .stat {
+      background: var(--bg);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 5rem 0;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    footer.visible { opacity: 1; transform: translateY(0); }
+
+    .footer-symbol {
+      font-size: 2rem;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.3em;
+    }
+
+    footer p {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 2rem; right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      z-index: 100;
+    }
+
+    nav a {
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--muted);
+      transition: background 0.3s, width 0.3s;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--gold);
+      width: 36px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { display: none; }
+      .tl-item { grid-template-columns: 65px 1px 1fr; gap: 0 1rem; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Navegação por seções">
+    <a href="#origem" title="Origem"></a>
+    <a href="#genghis" title="Gengis Khan"></a>
+    <a href="#expansao" title="Expansão"></a>
+    <a href="#legado" title="Legado"></a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-ornament">— História &nbsp;·&nbsp; Conquista &nbsp;·&nbsp; Legado —</p>
+    <h1 class="hero-title">
+      Império Mongol
+      <em>O maior império contíguo da história</em>
+    </h1>
+    <p class="hero-dates">1206 — 1368</p>
+    <div class="hero-divider"></div>
+  </header>
+
+  <!-- ORIGEM -->
+  <section id="origem">
+    <div class="container">
+      <p class="section-label">I &nbsp; Origem</p>
+      <h2>As estepes e o <em>povo nômade</em></h2>
+      <p>
+        Nas vastas estepes da Ásia Central, tribos nômades guerreiras habitavam um território de extremos — invernos letais, verões secos e uma vida inteiramente moldada pelo cavalo. Sem cidades, sem escrita própria, sem Estado: apenas clãs em perpétuo conflito por recursos e prestígio.
+      </p>
+      <p>
+        Foi desse caos tribal que emergiu, no século XII, um jovem chamado Temujin. Filho de um chefe envenenado por rivais, escravizado na adolescência, ele aprendeu desde cedo que a sobrevivência dependia de lealdade absoluta e força implacável.
+      </p>
+      <blockquote>
+        "O maior prazer é vencer seus inimigos, persegui-los, tomar seus bens, ver aqueles que eles amam em lágrimas."
+        <cite>— Atribuído a Gengis Khan</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- GENGHIS KHAN -->
+  <section id="genghis">
+    <div class="container">
+      <p class="section-label">II &nbsp; O Fundador</p>
+      <h2>Temujin &mdash; <em>Gengis Khan</em></h2>
+      <p>
+        Em 1206, após unificar todas as tribos mongóis sob seu comando, Temujin recebeu o título de <em>Gengis Khan</em> — "Soberano Universal". Esse momento fundador transformou um povo fragmentado em uma máquina militar sem precedentes.
+      </p>
+      <p>
+        Sua genialidade estava na organização. Substituiu a lealdade tribal pelo mérito: generais eram promovidos por habilidade, não por nascimento. Criou o <em>yam</em>, um sistema de correios a cavalo que conectava o império em semanas. E adotou a escrita uigur para codificar leis — a <em>Yasa</em> — tornando o Estado mongol surpreendentemente funcional.
+      </p>
+      <p>
+        A sua cavalaria era incomparável: rápida, disciplinada, capaz de fingir retiradas para atrair inimigos para emboscadas mortais. Em duas décadas, Gengis Khan conquistou mais território do que Roma em séculos.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPANSÃO -->
+  <section id="expansao">
+    <div class="container">
+      <p class="section-label">III &nbsp; Expansão</p>
+      <h2>Da China <em>ao coração da Europa</em></h2>
+
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat-number">33M</span>
+          <span class="stat-label">km² no auge</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100M+</span>
+          <span class="stat-label">pessoas sob domínio</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">4</span>
+          <span class="stat-label">grandes canatos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">162</span>
+          <span class="stat-label">anos de domínio</span>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <span class="tl-year">1206</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Unificação Mongol</strong>
+            <p>Temujin proclamado Gengis Khan. Início do Estado mongol unificado nas estepes.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1215</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Queda de Zhongdu</strong>
+            <p>A capital da Dinastia Jin (norte da China) é tomada. Iniciada a conquista do leste.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1220</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Destruição de Samarcanda</strong>
+            <p>O Império Khwarazmiano é aniquilado. Cidades milenares da Pérsia reduzidas a ruínas.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1241</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Invasão da Europa</strong>
+            <p>Batu Khan derrota os poloneses e húngaros. A Europa ocidental treme — e os mongóis recuam por questões internas.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1279</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Conquista da China</strong>
+            <p>Kublai Khan completa a conquista da Dinastia Song. Funda a Dinastia Yuan.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <span class="tl-year">1368</span>
+          <div class="tl-line"></div>
+          <div class="tl-content">
+            <strong>Fim da Dinastia Yuan</strong>
+            <p>A rebelião chinesa expulsa os mongóis. O império se fragmenta definitivamente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGADO -->
+  <section id="legado">
+    <div class="container">
+      <p class="section-label">IV &nbsp; Legado</p>
+      <h2>A <em>Pax Mongolica</em> e o mundo refeito</h2>
+      <p>
+        Paradoxalmente, o povo que destruiu cidades e ceifou dezenas de milhões de vidas também criou uma das maiores eras de conectividade global da história. A <em>Pax Mongolica</em> — a paz imposta pelo domínio mongol — permitiu que mercadores, diplomatas e ideias viajassem da China à Europa pela Rota da Seda com segurança sem precedente.
+      </p>
+      <p>
+        Marco Polo percorreu esse corredor. A pólvora, o papel-moeda e técnicas agrícolas migraram entre civilizações. As rotas comerciais que os mongóis protegeram aceleraram o intercâmbio cultural que, em parte, alimentaria o Renascimento europeu.
+      </p>
+      <p>
+        O custo humano foi catastrófico — estima-se que até 40 milhões de pessoas morreram nas conquistas mongóis. Mas o mapa genético, cultural e político da Eurásia foi permanentemente reconfigurado. Povos turcos se espalharam pela Anatólia. O Islã avançou para as estepes. A China conheceu séculos de influência estrangeira.
+      </p>
+      <blockquote>
+        "Gengis Khan não apenas conquistou o mundo — ele o conectou."
+        <cite>— Jack Weatherford, <em>Gengis Khan e a Formação do Mundo Moderno</em></cite>
+      </blockquote>
+      <p>
+        O Império Mongol durou pouco mais de um século e meio em sua forma unificada, mas seu eco ressoa até hoje: nas fronteiras dos Estados modernos, no DNA de centenas de milhões de pessoas, e no próprio conceito de globalização que ainda define o nosso mundo.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <span class="footer-symbol">☽ ✦ ☾</span>
+      <p>Império Mongol &nbsp;·&nbsp; 1206 – 1368</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section, footer').forEach(el => observer.observe(el));
+
+    // Nav active state
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(s => navObserver.observe(s));
+  </script>
+
+</body>
+</html>
